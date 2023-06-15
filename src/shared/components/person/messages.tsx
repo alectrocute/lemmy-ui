@@ -232,8 +232,15 @@ export class Messages extends Component<any, MessagesState> {
           </h5>
         );
       case "success": {
+        const isFromOrTo = (message: PrivateMessageView) => {
+          return (
+            message.creator.id === this.state.recipient ||
+            message.recipient.id === this.state.recipient
+          );
+        };
+
         const messages = this.state.messagesRes.data.private_messages.filter(
-          message => message.recipient.id === this.state.recipient
+          message => isFromOrTo(message)
         );
 
         return (
@@ -259,25 +266,23 @@ export class Messages extends Component<any, MessagesState> {
     if (this.state.messagesRes.state === "success") {
       const messages = this.state.messagesRes.data.private_messages;
 
+      const loggedInUserId =
+        UserService.Instance.myUserInfo?.local_user_view.person.id;
+
       return (
         <div className="">
-          {messages.map((message, key) => {
-            const loggedInUserId =
-              UserService.Instance.myUserInfo?.local_user_view.person.id;
-
-            if (message.recipient.id === loggedInUserId) {
-              return;
-            }
-
-            return (
-              <div
-                onClick={linkEvent(message, this.handleRecipientClick)}
-                key={key}
-              >
-                {message.recipient.name}
-              </div>
-            );
-          })}
+          {messages
+            .filter(message => message.recipient.id !== loggedInUserId)
+            .map((message, key) => {
+              return (
+                <div
+                  onClick={linkEvent(message, this.handleRecipientClick)}
+                  key={key}
+                >
+                  {message.recipient.name}
+                </div>
+              );
+            })}
         </div>
       );
     }
