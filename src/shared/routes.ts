@@ -11,6 +11,7 @@ import { Setup } from "./components/home/setup";
 import { Signup } from "./components/home/signup";
 import { Modlog } from "./components/modlog";
 import { Inbox } from "./components/person/inbox";
+import { Messages } from "./components/person/messages";
 import { PasswordChange } from "./components/person/password-change";
 import { Profile } from "./components/person/profile";
 import { RegistrationApplications } from "./components/person/registration-applications";
@@ -87,6 +88,11 @@ export const routes: IRoutePropsWithFetch[] = [
     path: `/inbox`,
     component: Inbox,
     fetchInitialData: Inbox.fetchInitialData,
+  },
+  {
+    path: `/messages`,
+    component: Messages,
+    fetchInitialData: Messages.fetchInitialData,
   },
   {
     path: `/settings`,
